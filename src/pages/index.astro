@@ -1,50 +1,486 @@
----
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
----
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Multiplex, the SSH tmux terminal for Vision Pro, iPad, and iPhone</title>
+<meta name="description" content="A spatial SSH terminal for remote tmux. Every session is a live monitor on a wall; attaching opens it in its own window. For Apple Vision Pro, iPad, and iPhone.">
+<meta property="og:title" content="Multiplex, the SSH tmux terminal">
+<meta property="og:description" content="Every tmux session as a live monitor on a wall. Attach opens it in its own window.">
+<meta property="og:image" content="https://multiplexterm.dev/assets/visionos-deck.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='212' fill='%2317181A'/%3E%3Cg fill='%23F2F3F4'%3E%3Crect x='96' y='654' width='832' height='68'/%3E%3Crect x='262' y='284' width='68' height='438'/%3E%3Crect x='694' y='284' width='68' height='438'/%3E%3C/g%3E%3Cpolyline points='296,304 512,600 728,304' fill='none' stroke='%23F2F3F4' stroke-width='68'/%3E%3Ccircle cx='512' cy='600' r='40' fill='%23E5484D'/%3E%3C/svg%3E">
+<style is:inline>
+  /* ── TALLY tokens (DESIGN.md, Frost light chassis) ──────────────────── */
+  :root{
+    --chassis:#E4E8EE;      /* page ground                                */
+    --bezel:#F0F3F7;        /* raised cards                               */
+    --line:#CDD3DC;         /* the visible line                           */
+    --screen:#F9FBFD;       /* brightest surface: screens read as paper   */
+    --ink:#191E25;
+    --ink2:#515C69;
+    --ink3:#87919E;
+    --tally:#C13439;
+    --caution:#966618;
+    --ok:#3E7C58;
+    --mini:#3A434E;
+    --graphite:#17181A;     /* the dark chassis, quoted in components     */
+    --sans:system-ui,-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --w:1160px;
+    --shadow:0 24px 60px -24px rgba(25,30,37,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--chassis);color:var(--ink);
+    font-family:var(--sans);font-size:17px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:clip;
+  }
+  /* wide mono content (terminal previews, code) must never widen the page */
+  .hero-grid>*,.split>*,.cell,.plan{min-width:0}
+  ::selection{background:rgba(193,52,57,.22)}
+  a{color:inherit}
+  img{max-width:100%;height:auto;display:block}
+  .wrap{max-width:var(--w);margin:0 auto;padding:0 24px}
+  .lbl{font-weight:700;font-stretch:condensed;text-transform:uppercase;letter-spacing:.09em}
+  .mono{font-family:var(--mono)}
+
+  /* ── nav ────────────────────────────────────────────────────────────── */
+  header{
+    position:sticky;top:0;z-index:40;
+    background:color-mix(in srgb,var(--chassis) 86%,transparent);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;gap:28px;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand svg{width:26px;height:26px;color:var(--ink)}
+  .brand .lbl{font-size:15px}
+  .nav-links{margin-left:auto;display:flex;gap:4px}
+  .nav-links a{
+    text-decoration:none;color:var(--ink2);font-size:14px;
+    padding:8px 14px;border-radius:0;
+  }
+  .nav-links a:hover{color:var(--ink);background:var(--bezel)}
+  .nav-links a:active{transform:translateY(1px)}
+
+  /* ── hero ───────────────────────────────────────────────────────────── */
+  .hero{padding:84px 0 76px;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:48px;align-items:center}
+  .eyebrow{color:var(--ink3);font-size:11px;margin-bottom:22px}
+  h1{
+    font-weight:750;font-stretch:condensed;letter-spacing:-.015em;
+    font-size:clamp(2.9rem,5.8vw,4.8rem);line-height:1.0;
+    margin-bottom:24px;text-wrap:balance;
+  }
+  .hero p{color:var(--ink2);font-size:19px;max-width:36ch;margin-bottom:36px}
+  .hero p strong{color:var(--ink);font-weight:600}
+
+  .asb{
+    display:inline-flex;align-items:center;gap:11px;text-decoration:none;
+    background:#000;border-radius:11px;padding:10px 19px 11px 15px;
+    transition:opacity .15s ease;
+  }
+  .asb:hover{opacity:.86}
+  .asb:active{transform:translateY(1px)}
+  .asb svg{width:27px;height:27px;fill:#fff;flex:none}
+  .asb-txt{display:flex;flex-direction:column;line-height:1.16;color:#fff}
+  .asb-txt small{font-size:11px;font-weight:400}
+  .asb-txt b{font-size:21px;font-weight:600;letter-spacing:-.01em}
+
+  /* The device lineup: Vision Pro, iPad, iPhone on one baseline at true
+     relative physical scale. Widths as % of the cluster derive from real
+     hardware widths: Vision Pro ~203 mm -> 51.2%, iPad Pro 11" 177.5 mm
+     -> 44.8%, iPhone 71.9 mm -> 18.1%. Screenshots are real captures;
+     the frames add each device's actual bezel share. */
+  .devices{
+    /* bleed into the page's outer margin, never past the viewport edge */
+    --bleed:clamp(24px, calc((100vw - var(--w))/2 + 24px), 140px);
+    position:relative;width:min(680px,calc(100% + var(--bleed)));
+    aspect-ratio:250/166;
+    margin:0 calc(-1*var(--bleed)) -76px auto;align-self:end;
+  }
+  .devices>*{position:absolute;bottom:0}
+  .dev-vp{width:51.2%;left:0;z-index:1;filter:brightness(1.06);mix-blend-mode:multiply}
+  .dev-pad{
+      width:44.8%;left:45.8%;aspect-ratio:1775/2497;z-index:2;
+    background:#0c0d0e;border-radius:18px;padding:2.2%;
+    box-shadow:var(--shadow),0 0 0 1px rgba(25,30,37,.35);
+  }
+  .dev-pad img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+  .dev-phone{
+    width:18.1%;left:81.9%;aspect-ratio:719/1500;z-index:3;
+    background:#0c0d0e;border-radius:15px;padding:1.05%;
+    box-shadow:var(--shadow),0 0 0 1px rgba(25,30,37,.35);
+  }
+  .dev-phone img{width:100%;height:100%;object-fit:cover;border-radius:11px}
+  @media (prefers-reduced-motion:no-preference){
+    .devices>*{animation:rise .9s cubic-bezier(.16,1,.3,1) both}
+    .dev-vp{animation-delay:.1s}
+    .dev-pad{animation-delay:.26s}
+    .dev-phone{animation-delay:.42s}
+    @keyframes rise{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+  }
+
+  /* ── sections ───────────────────────────────────────────────────────── */
+  section{padding:110px 0}
+  h2{
+    font-weight:750;font-stretch:condensed;letter-spacing:-.01em;
+    font-size:clamp(2rem,3.6vw,3rem);line-height:1.05;margin-bottom:18px;text-wrap:balance;
+  }
+  .sub{color:var(--ink2);font-size:18px;max-width:60ch}
+  .sub strong{color:var(--ink);font-weight:600}
+
+  /* wall band */
+  .wallband{border-top:1px solid var(--line);background:var(--bezel)}
+  .wallband .wrap{padding-top:110px}
+  .wallband .head{max-width:62ch;margin-bottom:56px}
+  .wallband img{width:100%;border:1px solid var(--line);border-bottom:none;box-shadow:var(--shadow)}
+
+  /* alternating splits */
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;align-items:center}
+  .split + .split{margin-top:110px}
+  .crop{
+    border:1px solid var(--line);background:var(--graphite);
+    aspect-ratio:5/4;overflow:hidden;box-shadow:var(--shadow);
+  }
+  .crop img{width:100%;height:100%;object-fit:cover;object-position:top}
+  .feat-list{list-style:none;margin-top:26px;display:grid;gap:16px}
+  .feat-list li{padding-left:18px;border-left:2px solid var(--line);color:var(--ink2)}
+  .feat-list b{display:block;color:var(--ink);font-weight:600}
+  .feat-list .pro{color:var(--ink3);font-family:var(--mono);font-size:11px;margin-left:6px}
+
+  /* light terminal preview: Tally Frost (screens brighter than frames) */
+  .term{background:var(--bezel);border:1px solid var(--line);box-shadow:var(--shadow)}
+  .term-screen{
+    background:var(--screen);border-bottom:1px solid var(--line);
+    padding:20px 20px 24px;font-family:var(--mono);font-size:12.5px;line-height:1.7;
+    color:var(--mini);white-space:pre-wrap;
+  }
+  .term-screen .dim{color:var(--ink3)}
+  .term-screen .amb{color:var(--caution)}
+  .strip{padding:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .strip .who{font-weight:700;font-stretch:condensed;letter-spacing:.09em;font-size:9.5px;color:var(--ink2);text-transform:uppercase;padding:0 8px 0 2px}
+  .chip{
+    font-family:var(--mono);font-size:10.5px;color:var(--ink);
+    background:var(--screen);border:1px solid var(--line);padding:6px 10px;cursor:default;
+  }
+  .chip:hover{border-color:var(--ink3)}
+  .chip.warm{color:#7A5A33}
+  .umdrow{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding:9px 12px}
+  .umdrow .lbl{font-size:10.5px}
+  .needs{display:flex;align-items:center;gap:5px;font-weight:700;font-stretch:condensed;letter-spacing:.09em;font-size:8.5px;color:var(--caution);text-transform:uppercase}
+  .needs i{width:7px;height:7px;background:var(--caution)}
+  .umdrow .tel{margin-left:auto;font-family:var(--mono);font-size:9.5px;color:var(--ink3)}
+
+  /* bento */
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:48px}
+  .cell{border:1px solid var(--line);background:var(--bezel);padding:28px}
+  .cell h3{font-weight:700;font-stretch:condensed;font-size:19px;margin-bottom:8px}
+  .cell p{color:var(--ink2);font-size:15.5px}
+  .cell .pro{color:var(--ink3);font-family:var(--mono);font-size:11px}
+  .c-mosh{grid-column:span 7;background:var(--screen)}
+  .c-mosh .wire{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-top:22px}
+  .c-mosh .wire b{color:var(--ok);font-weight:400}
+  .c-file{grid-column:span 5}
+  .c-file code{font-family:var(--mono);font-size:11px;color:var(--mini);background:var(--screen);border:1px solid var(--line);display:block;padding:10px 12px;margin-top:18px;white-space:pre;overflow-x:auto}
+  .c-termcell{grid-column:span 5}
+  .c-termcell ul{list-style:none;margin-top:12px;display:grid;gap:6px;color:var(--ink2);font-size:14px}
+  .c-termcell ul b{color:var(--ink);font-weight:600}
+  .c-termcell figure{margin:22px -28px -28px;overflow:hidden;border-top:1px solid var(--line)}
+  .c-termcell img{width:100%;height:70px;object-fit:cover;object-position:bottom center}
+  .c-widget{grid-column:span 4}
+  .c-priv{grid-column:span 3;background:var(--graphite);border-color:var(--graphite);color:#F2F3F4}
+  .c-priv h3{color:#F2F3F4}
+  .c-priv p{color:#9BA1A6}
+  .c-priv .mono{display:block;margin-top:16px;font-size:11px;color:#C8D2D6;line-height:2}
+
+  /* pricing */
+  .plans{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:12px;margin-top:48px}
+  .plan{border:1px solid var(--line);background:var(--bezel);padding:32px}
+  .plan.pro{background:var(--graphite);border-color:var(--graphite);color:#F2F3F4;box-shadow:var(--shadow)}
+  .plan-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;flex-wrap:wrap}
+  .plan-head .lbl{font-size:14px}
+  .iap{
+    font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;
+    color:#9BA1A6;border:1px solid rgba(255,255,255,.28);padding:2px 7px;white-space:nowrap;
+  }
+  .price{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ink3)}
+  .price b{font-weight:500;font-size:20px;color:var(--ink)}
+  .plan.pro .price{color:#9BA1A6}
+  .plan.pro .price b{color:#F2F3F4}
+  .plan-sub{color:var(--ink3);font-size:14px;margin-bottom:20px}
+  .plan.pro .plan-sub{color:#9BA1A6}
+  .plan ul{list-style:none;display:grid;gap:10px;color:var(--ink2);font-size:15px}
+  .plan.pro ul{color:#C8D2D6}
+  .plan ul li{padding-left:16px;position:relative}
+  .plan ul li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:2px;background:var(--ink3)}
+  .plan.pro ul li::before{background:#F2F3F4}
+  .plan .asb{margin-top:28px;background:#fff}
+  .plan .asb svg{fill:#000}
+  .plan .asb-txt{color:#000}
+  .fine{margin-top:38px;color:var(--ink3);font-size:13.5px;max-width:72ch}
+  .fine code{font-family:var(--mono);font-size:12px}
+
+  footer{border-top:1px solid var(--line);padding:44px 0 60px;color:var(--ink3);font-size:13.5px}
+  .foot{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+  .foot .brand svg{width:20px;height:20px}
+  .foot a{color:var(--ink2);text-decoration:none}
+  .foot a:hover{color:var(--ink)}
+  .foot .spacer{flex:1}
+
+  .rev{opacity:1;transform:none}
+  @media (prefers-reduced-motion:no-preference){
+    .rev{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+    .rev.in{opacity:1;transform:none}
+  }
+
+  @media (max-width:960px){
+    .hero{padding-top:56px;padding-bottom:64px}
+    .hero-grid,.split{grid-template-columns:1fr;gap:48px}
+    .split + .split{margin-top:80px}
+    .split.rtl .crop{order:-1}
+    .devices{margin:0 auto -64px;width:min(600px,94vw)}
+    .c-mosh,.c-file,.c-termcell,.c-widget,.c-priv{grid-column:span 12}
+    .plans{grid-template-columns:1fr}
+    section{padding:80px 0}
+    .wallband .wrap{padding-top:80px}
+  }
+  @media (max-width:560px){
+    .nav-links a:not(.keep){display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Multiplex">
+      <svg viewBox="0 0 1024 1024" aria-hidden="true">
+        <g fill="currentColor">
+          <rect x="0" y="654" width="1024" height="68"/>
+          <rect x="262" y="284" width="68" height="438"/>
+          <rect x="694" y="284" width="68" height="438"/>
+        </g>
+        <polyline points="296,304 512,600 728,304" fill="none" stroke="currentColor" stroke-width="68" stroke-linecap="butt" stroke-linejoin="miter"/>
+        <circle cx="512" cy="600" r="40" fill="#C13439"/>
+      </svg>
+      <span class="lbl">Multiplex</span>
+    </a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#wall">The wall</a>
+      <a href="#agents">Agents</a>
+      <a class="keep" href="#pricing">Pricing</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ══ HERO ═══════════════════════════════════════════════════════════ -->
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow lbl">An SSH terminal for Apple Vision Pro, iPad &amp; iPhone</p>
+        <h1>Every session, its own window.</h1>
+        <p>Multiplex is a spatial <strong>SSH terminal for remote tmux</strong>. See every session live on a wall, then attach it anywhere.</p>
+        <a class="asb" href="https://apps.apple.com/app/id6790074057">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.031 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+          <span class="asb-txt"><small>Download on the</small><b>App Store</b></span>
+        </a>
+      </div>
+      <div class="devices" role="group" aria-label="Multiplex runs on Apple Vision Pro, iPad, and iPhone, shown at their relative physical sizes">
+        <div class="dev-vp">
+          <img src="assets/visionpro.jpg" width="780" height="520" alt="Apple Vision Pro">
+        </div>
+        <div class="dev-pad">
+          <img src="assets/ipad-deck.png" width="2064" height="2752" alt="The Multiplex deck on iPad: a grid of live tmux session tiles for host devbox" fetchpriority="high">
+        </div>
+        <div class="dev-phone">
+          <img src="assets/iphone-deck.png" width="1206" height="2622" alt="The Multiplex deck on iPhone: a column of live session tiles, one wearing a red LIVE tally">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ THE WALL ═══════════════════════════════════════════════════════ -->
+  <div class="wallband" id="wall">
+    <div class="wrap rev">
+      <div class="head">
+        <h2>A monitor wall for your fleet.</h2>
+        <p class="sub">Hosts probe concurrently over SSH and every tmux session appears as a live tile: its <strong>actual last lines</strong>, one spine segment per window, a red <strong>LIVE</strong> tally while you are attached. On Vision Pro, the wall hangs in your room.</p>
+      </div>
+      <img src="assets/visionos-deck.jpg" width="2400" height="1350" alt="The Multiplex deck on Apple Vision Pro: a dark monitor wall of live tmux session tiles floating in a living room" loading="lazy">
+    </div>
+  </div>
+
+  <!-- ══ SPLIT: HONEST STATE ════════════════════════════════════════════ -->
+  <section>
+    <div class="wrap split rev">
+      <div class="crop">
+        <img src="assets/ipad-deck.png" width="2064" height="2752" alt="The Multiplex deck on iPad: session tiles with window spines, ATTACH badges, and LIVE tallies" loading="lazy">
+      </div>
+      <div>
+        <h2>Real multi-window, on iPad and Vision&nbsp;Pro.</h2>
+        <p class="sub">Every attached session is its own window: floating spatial windows you place around the room on Vision Pro, real scenes in Stage Manager and Split View on iPad. Merge windows into tabs and split them back out; the <strong>SSH connection</strong>, buffer, and scrollback move with the tab. Detach, and the wall still shows it running.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SPLIT: AGENTS ══════════════════════════════════════════════════ -->
+  <section id="agents" style="padding-top:0">
+    <div class="wrap split rtl rev">
+      <div>
+        <h2>Watch over Claude Code, from anywhere.</h2>
+        <p class="sub">Multiplex spots Claude Code, Codex, and Pi in every pane, right on the wall.</p>
+        <ul class="feat-list">
+          <li><b>One-tap command chips</b>Stop, clear, compact, model and thinking switches follow the foreground agent, even in a plain SSH shell.</li>
+          <li><b>Custom commands that travel</b>Per host and per agent, multiline if you like, synced to your other devices with the host.</li>
+          <li><b>Alerts when it needs you<span class="pro">PRO</span></b>A finished turn, a question, a permission prompt: get notified instead of babysitting.</li>
+          <li><b>Prompt history with jump<span class="pro">PRO</span></b>Every prompt from Claude Code's own session file, one tap to jump the transcript back to it.</li>
+        </ul>
+      </div>
+      <div class="term" role="img" aria-label="A Multiplex terminal in the light Tally Frost theme running Claude Code, with the agent command strip and a NEEDS YOU flag">
+        <div class="term-screen"><span class="dim">&#10095;</span> ship the widget timeline fix
+<span class="dim">&#9679; I&rsquo;ll update the reload gate first&hellip;</span>
+
+<span class="amb">&#10033; Waiting on Bash(git push)</span>
+<span class="dim">  Allow? (y/n)</span></div>
+        <div class="strip">
+          <span class="who">&#10033; Claude Code</span>
+          <span class="chip">STOP</span>
+          <span class="chip">/clear</span>
+          <span class="chip">/compact</span>
+          <span class="chip">THINK</span>
+          <span class="chip warm">deploy st&hellip;</span>
+          <span class="chip">MORE</span>
+        </div>
+        <div class="umdrow">
+          <span class="lbl">Claude &middot; Devbox</span>
+          <span class="needs"><i></i>Needs you</span>
+          <span class="tel">TMUX &middot; PANE 0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BENTO ══════════════════════════════════════════════════════════ -->
+  <section style="padding-top:0">
+    <div class="wrap rev">
+      <h2>And the parts you will lean on daily.</h2>
+      <div class="bento">
+        <div class="cell c-mosh">
+          <h3>mosh built in <span class="pro">PRO</span></h3>
+          <p>Flip a host to mosh and the session survives sleep, roaming, and IP changes. A native Swift mosh client, no companion app: made for a headset that suspends and an iPad that hops networks.</p>
+          <div class="wire">SSH &#8594; mosh-server &#8594; <b>UDP 60001</b> &middot; reconnects itself after standby</div>
+        </div>
+        <div class="cell c-file">
+          <h3>Drop a file, get a path</h3>
+          <p>Drag a file onto the terminal, or attach from Files, Photos, or the iPad camera. Multiplex uploads it beside your agent and types the remote path for you.</p>
+          <code>~/project/.multiplex-drops/spec.pdf</code>
+        </div>
+        <div class="cell c-termcell">
+          <div>
+            <h3>A real SSH terminal</h3>
+            <ul>
+              <li><b>xterm-256color</b>, mouse-aware TUIs</li>
+              <li><b>IMEs and hardware keyboards</b></li>
+              <li><b>tmux menu</b> and touch copy mode</li>
+              <li><b>Ten themes</b>, custom editor with Pro</li>
+            </ul>
+          </div>
+          <figure>
+            <img src="assets/ipad-terminal.png" width="2064" height="2752" alt="The bottom of a Multiplex terminal on iPad: tmux status line and the TALLY key rail" loading="lazy">
+          </figure>
+        </div>
+        <div class="cell c-widget">
+          <h3>Widgets &amp; Shortcuts</h3>
+          <p>Home Screen widgets show last-known session frames with an honest SEEN stamp. Siri and Shortcuts open a shell or launch an agent with a first prompt.</p>
+        </div>
+        <div class="cell c-priv">
+          <h3>Private by design</h3>
+          <p>Hosts and secrets sync through iCloud Keychain, end to end encrypted.</p>
+          <span class="mono">NO ACCOUNT<br>NO ANALYTICS<br>NO SERVERS</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRICING ════════════════════════════════════════════════════════ -->
+  <section id="pricing" style="padding-top:0">
+    <div class="wrap rev">
+      <p class="eyebrow lbl">Free download, one in-app purchase</p>
+      <h2>Free to start. Pro for the fleet.</h2>
+      <div class="plans">
+        <div class="plan">
+          <div class="plan-head"><span class="lbl">Free</span><span class="price"><b>$0</b></span></div>
+          <p class="plan-sub">The full spatial experience, two hosts.</p>
+          <ul>
+            <li>Live wall, spatial windows, tabs, merge and split</li>
+            <li>Agent detection everywhere, ten command-chip taps a day</li>
+            <li>File drops, widgets, Shortcuts, iCloud Keychain sync</li>
+            <li>Built-in themes, light and dark appearance</li>
+          </ul>
+        </div>
+        <div class="plan pro">
+          <div class="plan-head"><span class="lbl">Multiplex Pro</span><span class="iap">In-app purchase</span><span class="price"><b>$19.99</b> once</span></div>
+          <p class="plan-sub">Everything in Free, unlocked with one purchase. No subscription.</p>
+          <ul>
+            <li>Unlimited hosts</li>
+            <li>mosh: sessions survive sleep, roaming, IP changes</li>
+            <li>Unmetered agent chips, and alerts when a session needs you</li>
+            <li>Claude Code prompt history with jump-back-to-message</li>
+            <li>Custom theme editor, on all your devices</li>
+          </ul>
+          <a class="asb" href="https://apps.apple.com/app/id6790074057">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.031 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+            <span class="asb-txt"><small>Download on the</small><b>App Store</b></span>
+          </a>
+        </div>
+      </div>
+      <p class="fine">Multiplex is a free download; Multiplex Pro is a one-time US&nbsp;$19.99 in-app purchase (pricing varies by storefront). You need a host you can reach over SSH, with a password or an OpenSSH ed25519 or RSA key. The live wall and persistent sessions need <code>tmux&nbsp;1.8+</code> on the host; plain SSH shells work without tmux; mosh needs <code>mosh-server</code>. Requires visionOS&nbsp;1.0 or iOS&nbsp;17.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="#top" aria-label="Multiplex">
+      <svg viewBox="0 0 1024 1024" aria-hidden="true">
+        <g fill="currentColor">
+          <rect x="0" y="654" width="1024" height="68"/>
+          <rect x="262" y="284" width="68" height="438"/>
+          <rect x="694" y="284" width="68" height="438"/>
+        </g>
+        <polyline points="296,304 512,600 728,304" fill="none" stroke="currentColor" stroke-width="68" stroke-linecap="butt" stroke-linejoin="miter"/>
+        <circle cx="512" cy="600" r="40" fill="#C13439"/>
+      </svg>
+    </a>
+    <span>&copy; 2026 Multiplex</span>
+    <span class="spacer"></span>
+    <a href="privacy/">Privacy</a>
+    <a href="https://apps.apple.com/app/id6790074057">App Store</a>
+  </div>
+</footer>
+
+<script is:inline>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revs = document.querySelectorAll('.rev');
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:.15});
+    revs.forEach(function(el){ io.observe(el); });
+  } else {
+    revs.forEach(function(el){ el.classList.add('in'); });
+  }
+})();
+</script>
+</body>
 </html>
