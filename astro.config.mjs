@@ -2,15 +2,9 @@
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 
-import cloudflare from "@astrojs/cloudflare";
-
-// https://astro.build/config
+// Fully static output: both pages prerender to plain HTML, so the site
+// deploys unchanged to Cloudflare (assets-only Worker) or Vercel.
 export default defineConfig({
 	site: "https://multiplexterm.dev",
 	integrations: [sitemap()],
-	adapter: cloudflare({
-		platformProxy: {
-			enabled: true,
-		},
-	}),
 });
