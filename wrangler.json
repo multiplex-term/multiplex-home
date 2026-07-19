@@ -1,14 +1,11 @@
 {
 	"name": "multiplex-home",
 	"compatibility_date": "2025-10-08",
-	"compatibility_flags": ["nodejs_compat"],
-	"main": "./dist/_worker.js/index.js",
 	"assets": {
-		"directory": "./dist",
-		"binding": "ASSETS"
+		"directory": "./dist"
 	},
-	"observability": {
-		"enabled": true
-	},
-	"upload_source_maps": true
+	"workers_dev": true,
+	"routes": [
+		{ "pattern": "preview.multiplexterm.dev", "custom_domain": true }
+	]
 }
