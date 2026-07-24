@@ -6,6 +6,7 @@
 	},
 	"workers_dev": true,
 	"routes": [
+		{ "pattern": "multiplexterm.dev", "custom_domain": true },
 		{ "pattern": "preview.multiplexterm.dev", "custom_domain": true }
 	]
 }
