@@ -102,7 +102,7 @@
 <main>
   <div class="wrap">
     <h1>Privacy</h1>
-    <p class="date">EFFECTIVE 2026-07-18</p>
+    <p class="date">EFFECTIVE 2026-07-24</p>
 
     <div class="tldr">
       <strong>Multiplex collects no data.</strong> There is no account, no analytics, no tracking, no ads, no third-party SDK, and no server of ours. Your bytes travel between your devices and the hosts you add, and nowhere else.
@@ -135,6 +135,9 @@
     <h2>Notifications</h2>
     <p>Agent alerts (a Pro feature you enable) are <strong>local notifications</strong> generated on your device from sessions the app is already watching. There is no push service and no notification data leaves the device.</p>
 
+    <h2>App Lock</h2>
+    <p>The optional App Lock setting veils Multiplex behind <strong>Face ID, Touch ID, or Optic ID</strong>, with the device passcode as the system fallback. Authentication is performed entirely by the system: Multiplex never sees biometric data, only whether the unlock succeeded. The setting stays on that device and never syncs.</p>
+
     <h2>Purchases</h2>
     <p>Multiplex is a free download; <strong>Multiplex Pro</strong> is a one-time in-app purchase handled entirely by Apple through the App Store. Apple processes payment and shares no payment details with us. Entitlement checks happen on-device through StoreKit.</p>
 
@@ -145,6 +148,7 @@
         <tr><td>Camera</td><td>Only if you choose FILE, then Camera, to shoot a photo straight to your host.</td></tr>
         <tr><td>Local Network</td><td>Only when a host you added lives on your local network.</td></tr>
         <tr><td>Notifications</td><td>Only if you turn on agent alerts.</td></tr>
+        <tr><td>Face ID / Optic ID</td><td>Only if you turn on App Lock, to unlock the app. The system does the checking; Multiplex learns only the result.</td></tr>
       </tbody>
     </table>
     <p>Photos and Files need no permission grant because the system pickers hand the app only what you select.</p>
