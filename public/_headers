@@ -1,0 +1,9 @@
+# Cloudflare Workers static-asset headers.
+#
+# The installer has no file extension, so it would otherwise be served as
+# application/octet-stream — which makes browsers download it instead of
+# showing it. Anyone about to pipe a script into their shell should be able to
+# read it first by opening the URL, so it is served as plain text.
+/install-mpx-cli
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=300

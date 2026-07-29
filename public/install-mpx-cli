@@ -1,0 +1,204 @@
+#!/bin/sh
+# Install mpx — the companion CLI for Multiplex (https://multiplexterm.dev).
+#
+#   curl -fsSL https://multiplexterm.dev/install-mpx-cli | sh
+#
+# Covers macOS and Linux, arm64 and x86_64. Downloads a prebuilt archive from
+# github.com/multiplex-term/multiplex-cli-releases, verifies its SHA-256
+# against that release's SHA256SUMS, and installs `mpx` plus the spelled-out
+# `multiplex` alias.
+#
+# Written for POSIX sh, not bash: the machine being bound is often a server
+# whose /bin/sh is dash or busybox, which is precisely the machine someone
+# reaches for a one-line installer on.
+#
+# Environment overrides:
+#   MPX_VERSION=v0.1.0   install a specific tag instead of the latest
+#   MPX_INSTALL_DIR=...  install here instead of the default search
+#   MPX_NO_ALIAS=1       install only `mpx`, skip the `multiplex` alias
+set -eu
+
+REPO="multiplex-term/multiplex-cli-releases"
+BASE="https://github.com/$REPO/releases"
+
+say() { printf '%s\n' "$*"; }
+note() { printf '\033[2m·\033[0m %s\n' "$*"; }
+ok() { printf '\033[32m+\033[0m %s\n' "$*"; }
+die() { printf '\033[31m!\033[0m %s\n' "$*" >&2; exit 1; }
+
+need() {
+    command -v "$1" >/dev/null 2>&1 || die "$1 is required but not installed"
+}
+
+# ── what are we running on ───────────────────────────────────────────────────
+
+detect_target() {
+    os=$(uname -s)
+    arch=$(uname -m)
+    case "$os" in
+        Darwin) os_part="apple-darwin" ;;
+        # musl, statically linked: one Linux build for glibc distros and
+        # Alpine alike.
+        Linux) os_part="unknown-linux-musl" ;;
+        *) die "unsupported OS: $os. mpx ships for macOS and Linux; build from source for anything else." ;;
+    esac
+    case "$arch" in
+        x86_64 | amd64) arch_part="x86_64" ;;
+        arm64 | aarch64) arch_part="aarch64" ;;
+        *) die "unsupported architecture: $arch. mpx ships for x86_64 and arm64." ;;
+    esac
+    printf '%s-%s' "$arch_part" "$os_part"
+}
+
+# ── where do we put it ───────────────────────────────────────────────────────
+
+# Prefer somewhere already on PATH and writable without sudo. Nothing here
+# escalates: an installer piped from the network should not be acquiring root
+# on its own initiative, so if no writable directory exists we say what to do
+# rather than reaching for sudo.
+detect_dir() {
+    if [ -n "${MPX_INSTALL_DIR:-}" ]; then
+        printf '%s' "$MPX_INSTALL_DIR"
+        return
+    fi
+    for candidate in "$HOME/.local/bin" /usr/local/bin "$HOME/bin"; do
+        case ":$PATH:" in
+            *":$candidate:"*)
+                if [ -d "$candidate" ] && [ -w "$candidate" ]; then
+                    printf '%s' "$candidate"
+                    return
+                fi
+                ;;
+        esac
+    done
+    # Nothing suitable on PATH: fall back to the XDG-ish default and warn
+    # afterwards that it needs adding.
+    printf '%s' "$HOME/.local/bin"
+}
+
+# ── which version ────────────────────────────────────────────────────────────
+
+resolve_version() {
+    if [ -n "${MPX_VERSION:-}" ]; then
+        printf '%s' "$MPX_VERSION"
+        return
+    fi
+    # Follow the /latest redirect rather than parsing the API: no rate limit,
+    # no token, no JSON parsing in sh.
+    # A private or release-less repository answers 404 to an anonymous
+    # request, which is indistinguishable from being offline at this level —
+    # so name every cause rather than guessing at one.
+    location=$(curl -fsSLI -o /dev/null -w '%{url_effective}' "$BASE/latest" 2>/dev/null) || location=""
+    tag=${location##*/}
+    case "$tag" in
+        v*) printf '%s' "$tag" ;;
+        *) die "could not work out the latest mpx version.
+  Either the network is down, or no release has been published yet.
+  Check $BASE, or pin a version:
+    curl -fsSL https://multiplexterm.dev/install-mpx-cli | MPX_VERSION=v0.1.0 sh" ;;
+    esac
+}
+
+# ── go ───────────────────────────────────────────────────────────────────────
+
+need uname
+need curl
+need tar
+
+target=$(detect_target)
+version=$(resolve_version)
+archive="mpx-$version-$target.tar.gz"
+dir=$(detect_dir)
+
+say ""
+say "  mpx $version · $target"
+say ""
+
+tmp=$(mktemp -d 2>/dev/null || mktemp -d -t mpx)
+# Leave nothing behind, including on the failure paths below.
+trap 'rm -rf "$tmp"' EXIT INT TERM
+
+note "downloading $archive"
+curl -fsSL --proto '=https' --tlsv1.2 -o "$tmp/$archive" \
+    "$BASE/download/$version/$archive" \
+    || die "no build for $target in $version. See $BASE/$version for what shipped."
+
+# Verification is not optional. This script is piped from the network into a
+# shell; the least it can do is prove the bytes it then makes executable are
+# the bytes that were published.
+note "verifying checksum"
+curl -fsSL --proto '=https' --tlsv1.2 -o "$tmp/SHA256SUMS" \
+    "$BASE/download/$version/SHA256SUMS" \
+    || die "$version has no SHA256SUMS — refusing to install unverified bytes"
+
+expected=$(grep " $archive\$" "$tmp/SHA256SUMS" | cut -d' ' -f1) \
+    || expected=""
+[ -n "$expected" ] || die "$archive is not listed in SHA256SUMS — refusing to install"
+
+if command -v shasum >/dev/null 2>&1; then
+    actual=$(shasum -a 256 "$tmp/$archive" | cut -d' ' -f1)
+elif command -v sha256sum >/dev/null 2>&1; then
+    actual=$(sha256sum "$tmp/$archive" | cut -d' ' -f1)
+else
+    die "need shasum or sha256sum to verify the download"
+fi
+
+if [ "$expected" != "$actual" ]; then
+    die "checksum mismatch for $archive
+    expected $expected
+    got      $actual
+  Not installing. Try again; if it persists, report it — this should never happen."
+fi
+ok "checksum verified"
+
+tar -xzf "$tmp/$archive" -C "$tmp" || die "could not unpack $archive"
+unpacked="$tmp/mpx-$version-$target"
+[ -x "$unpacked/mpx" ] || die "$archive did not contain an mpx binary"
+
+mkdir -p "$dir" || die "could not create $dir"
+[ -w "$dir" ] || die "$dir is not writable.
+  Either create a writable directory on your PATH, or choose one:
+    curl -fsSL https://multiplexterm.dev/install-mpx-cli | MPX_INSTALL_DIR=~/bin sh"
+
+# Install to a temporary name then move into place, so an interrupted install
+# cannot leave a half-written binary where a working one used to be.
+install_one() {
+    src=$1
+    dest=$2
+    cp "$src" "$dest.mpx-new" || die "could not write to $dest"
+    chmod 755 "$dest.mpx-new"
+    mv -f "$dest.mpx-new" "$dest" || die "could not install $dest"
+}
+
+install_one "$unpacked/mpx" "$dir/mpx"
+ok "installed $dir/mpx"
+
+if [ -z "${MPX_NO_ALIAS:-}" ]; then
+    install_one "$unpacked/mpx" "$dir/multiplex"
+    ok "installed $dir/multiplex"
+fi
+
+# ── did it land somewhere usable ─────────────────────────────────────────────
+
+say ""
+case ":$PATH:" in
+    *":$dir:"*)
+        installed=$("$dir/mpx" --version 2>/dev/null || echo "mpx")
+        ok "$installed"
+        say ""
+        say "  Run it on this machine, then confirm in Multiplex:"
+        say ""
+        say "    mpx bind"
+        say ""
+        say "  The machine appears under Add Host ▸ Bind. Add --copy if you"
+        say "  want the code on your clipboard to paste instead."
+        ;;
+    *)
+        note "$dir is not on your PATH yet. Add it:"
+        say ""
+        say "    export PATH=\"$dir:\$PATH\""
+        say ""
+        say "  then run:  mpx bind"
+        ;;
+esac
+say ""
