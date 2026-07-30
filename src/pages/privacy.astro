@@ -102,7 +102,7 @@
 <main>
   <div class="wrap">
     <h1>Privacy</h1>
-    <p class="date">EFFECTIVE 2026-07-26</p>
+    <p class="date">EFFECTIVE 2026-07-30</p>
 
     <div class="tldr">
       <strong>Multiplex collects no data.</strong> There is no account, no analytics, no tracking, no ads, no third-party SDK, and no server of ours. Your bytes travel between your devices and the hosts you add, and nowhere else.
@@ -130,7 +130,7 @@
     <p>Attachments use the system pickers, which run outside the app: Multiplex receives only the items you pick, never your library. A photo taken with the camera (iPad and iPhone) is uploaded straight to your host and is not added to your photo library. Uploads go over the same SSH connection as the terminal.</p>
 
     <h2>Dictation</h2>
-    <p>With a physical keyboard attached, the key bar offers a dictation key in place of the show-keyboard key — iOS hides the software keyboard, and its microphone key with it. Speech is transcribed by Apple's Speech framework, <strong>on your device wherever your language supports it</strong>; where it is not supported, the system sends the audio to Apple exactly as the keyboard's own dictation does. The finished words are typed into your session, without pressing Return. Multiplex stores neither the audio nor the text, and the microphone is open only while the bar shows <em>LISTENING</em>.</p>
+    <p>Multiplex restores Dictation whenever iOS's own microphone key is unavailable: the key bar offers a mic while a physical keyboard suppresses the software keyboard, and the top-right <em>KEYBOARD LOCKED</em> tip offers the same action while you deliberately keep that keyboard closed. Speech is transcribed by Apple's Speech framework, <strong>on your device wherever your language supports it</strong>; where it is not supported, the system sends the audio to Apple exactly as the keyboard's own dictation does. The finished words are typed into your session, without pressing Return. Multiplex stores neither the audio nor the text, and the microphone is open only while the bar shows <em>LISTENING</em>.</p>
 
     <h2>Widgets and Shortcuts</h2>
     <p>Home Screen widgets read a snapshot the app writes into a private App Group container on your device: host names, session names, last-seen screen lines, and timestamps. The snapshot contains <strong>no secrets</strong>, and widgets never open network connections. Shortcuts and the <code>multiplex://</code> scheme open the app itself.</p>
@@ -149,7 +149,7 @@
       <thead><tr><th>Permission</th><th>When, and why</th></tr></thead>
       <tbody>
         <tr><td>Camera</td><td>Only if you choose FILE, then Camera, to shoot a photo straight to your host.</td></tr>
-        <tr><td>Microphone and Speech Recognition</td><td>Only if you press the key bar's dictation key, which appears in place of the show-keyboard key while a physical keyboard is attached.</td></tr>
+        <tr><td>Microphone and Speech Recognition</td><td>Only if you press a terminal dictation button: in the key bar with a physical keyboard, or in the <em>KEYBOARD LOCKED</em> tip while the software keyboard is locked closed.</td></tr>
         <tr><td>Local Network</td><td>Only when a host you added lives on your local network.</td></tr>
         <tr><td>Notifications</td><td>Only if you turn on agent alerts.</td></tr>
         <tr><td>Face ID / Optic ID</td><td>Only if you turn on App Lock, to unlock the app. The system does the checking; Multiplex learns only the result.</td></tr>
