@@ -92,6 +92,19 @@
   .asb-txt small{font-size:11px;font-weight:400}
   .asb-txt b{font-size:21px;font-weight:600;letter-spacing:-.01em}
 
+  .cta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .tfb{
+    display:inline-flex;align-items:center;gap:11px;text-decoration:none;
+    background:var(--bezel);border:1px solid var(--line);border-radius:11px;
+    padding:9px 19px 10px 15px;transition:border-color .15s ease;
+  }
+  .tfb:hover{border-color:var(--ink3)}
+  .tfb:active{transform:translateY(1px)}
+  .tfb svg{width:27px;height:27px;fill:var(--ink);flex:none}
+  .tfb-txt{display:flex;flex-direction:column;line-height:1.16;color:var(--ink)}
+  .tfb-txt small{font-size:11px;font-weight:400;color:var(--ink2)}
+  .tfb-txt b{font-size:21px;font-weight:600;letter-spacing:-.01em}
+
   /* The device lineup: Vision Pro, iPad, iPhone on one baseline at true
      relative physical scale. Widths as % of the cluster derive from real
      hardware widths: Vision Pro ~203 mm -> 51.2%, iPad Pro 11" 177.5 mm
@@ -288,10 +301,16 @@
         <p class="eyebrow lbl">An SSH terminal for Apple Vision Pro, iPad &amp; iPhone</p>
         <h1>Every session, its own window.</h1>
         <p>Multiplex is a spatial <strong>SSH terminal for remote tmux</strong>. See every session live on a wall, then attach it anywhere.</p>
-        <a class="asb" href="https://apps.apple.com/app/id6790074057">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.031 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
-          <span class="asb-txt"><small>Download on the</small><b>App Store</b></span>
-        </a>
+        <div class="cta">
+          <a class="asb" href="https://apps.apple.com/app/id6790074057">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.031 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+            <span class="asb-txt"><small>Download on the</small><b>App Store</b></span>
+          </a>
+          <a class="tfb" href="https://testflight.apple.com/join/91116D4n">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.4 21.6 22.8 12 2.4 2.4l.006 7.2L16.8 12 2.406 14.4z"/></svg>
+            <span class="tfb-txt"><small>Try the beta on</small><b>TestFlight</b></span>
+          </a>
+        </div>
       </div>
       <div class="devices" role="group" aria-label="Multiplex runs on Apple Vision Pro, iPad, and iPhone, shown at their relative physical sizes">
         <div class="dev-vp">
@@ -465,6 +484,7 @@
     <span class="spacer"></span>
     <a href="privacy/">Privacy</a>
     <a href="https://apps.apple.com/app/id6790074057">App Store</a>
+    <a href="https://testflight.apple.com/join/91116D4n">TestFlight</a>
   </div>
 </footer>
 
