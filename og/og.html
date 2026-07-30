@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!--
+  Source for public/assets/og.png (the og:image card, 1200x630 @2x).
+  Regenerate after editing:
+
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless=new --screenshot=public/assets/og.png \
+    --window-size=1200,630 --force-device-scale-factor=2 --hide-scrollbars \
+    "file://$PWD/og/og.html"
+
+  Tokens are the TALLY graphite chassis (DESIGN.md in the app repo).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OG — Monitor wall (graphite)</title>
+<style>
+  :root{
+    --chassis:#17181A; --bezel:#1E2023; --screen:#0A0B0C; --line:#2A2D31;
+    --ink:#F2F3F4; --ink2:#9AA3AE; --ink3:#6B7480; --tally:#E5484D;
+    --sans:system-ui,-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{background:var(--chassis);color:var(--ink);font-family:var(--sans);
+       -webkit-font-smoothing:antialiased;position:relative}
+  .lbl{font-weight:700;font-stretch:condensed;text-transform:uppercase;letter-spacing:.1em}
+  .mono{font-family:var(--mono)}
+
+  /* left column */
+  .left{position:absolute;left:72px;top:72px;bottom:72px;width:580px;
+        display:flex;flex-direction:column}
+  .brand{display:flex;align-items:center;gap:16px}
+  .brand svg{width:56px;height:56px}
+  .brand .lbl{font-size:22px;letter-spacing:.14em}
+  h1{font-weight:750;font-stretch:condensed;letter-spacing:-.015em;
+     font-size:67px;line-height:1.04;margin-top:52px;text-wrap:balance}
+  .sub{margin-top:26px;font-size:23px;line-height:1.45;color:var(--ink2);max-width:30ch}
+  .foot{margin-top:auto;display:flex;align-items:center;gap:14px;
+        font-size:19px;color:var(--ink3)}
+  .foot .rule{flex:none;width:34px;height:1px;background:var(--line)}
+
+  /* the wall — tiles bleeding off the right edge */
+  .wall{position:absolute;left:708px;top:-36px;bottom:-36px;width:560px;
+        display:flex;flex-direction:column;gap:18px}
+  .tile{background:var(--bezel);border:1px solid var(--line);border-radius:4px;
+        overflow:hidden;flex:none;width:460px}
+  .tile.push{margin-left:44px}
+  .tile-hd{display:flex;align-items:center;justify-content:space-between;
+           height:36px;padding:0 14px}
+  .tile-hd .lbl{font-size:13px;color:var(--ink)}
+  .lamp{display:flex;align-items:center;gap:7px}
+  .lamp i{width:8px;height:8px;border-radius:50%;background:var(--tally);
+          box-shadow:0 0 8px rgba(229,72,77,.7)}
+  .lamp span{font-size:11px;color:var(--tally)}
+  .lamp.idle i{background:#3D434B;box-shadow:none}
+  .lamp.idle span{color:var(--ink3)}
+  .tile-scr{background:var(--screen);border-top:1px solid var(--line);
+            border-bottom:1px solid var(--line);padding:12px 14px;
+            font-family:var(--mono);font-size:13.5px;line-height:1.6;color:var(--ink2)}
+  .tile-scr .hi{color:var(--ink)}
+  .tile-scr .red{color:var(--tally)}
+  .tile-ft{display:flex;align-items:center;justify-content:space-between;
+           height:28px;padding:0 14px;font-size:10.5px;color:var(--ink3)}
+  .tile-ft .lbl{font-size:10.5px;letter-spacing:.12em}
+</style>
+</head>
+<body>
+
+  <div class="left">
+    <div class="brand">
+      <svg viewBox="0 0 1024 1024"><rect width="1024" height="1024" rx="212" fill="#232529"/><g fill="#F2F3F4"><rect x="96" y="654" width="832" height="68"/><rect x="262" y="284" width="68" height="438"/><rect x="694" y="284" width="68" height="438"/></g><polyline points="296,304 512,600 728,304" fill="none" stroke="#F2F3F4" stroke-width="68"/><circle cx="512" cy="600" r="40" fill="#E5484D"/></svg>
+      <span class="lbl">Multiplex</span>
+    </div>
+    <h1>Every tmux session, a live monitor on a wall.</h1>
+    <p class="sub">The spatial SSH terminal for Apple&nbsp;Vision&nbsp;Pro, iPad, and iPhone.</p>
+    <div class="foot mono"><span class="rule"></span>multiplexterm.dev</div>
+  </div>
+
+  <div class="wall">
+    <div class="tile push">
+      <div class="tile-hd"><span class="lbl">deploy</span>
+        <span class="lamp idle"><i></i><span class="lbl">Idle</span></span></div>
+      <div class="tile-scr">$ kubectl rollout status deploy/api<br>Waiting for rollout… 8 of 12 updated<br>$ <span class="hi">▌</span></div>
+      <div class="tile-ft"><span class="lbl">1 win · shell</span><span class="lbl">2h</span></div>
+    </div>
+    <div class="tile">
+      <div class="tile-hd"><span class="lbl">agent</span>
+        <span class="lamp"><i></i><span class="lbl">Live</span></span></div>
+      <div class="tile-scr"><span class="hi">✳ Claude Code</span> · ~/workspace/api<br>⠧ Refactoring the probe parser…<br><span class="red">↑258k ↓8.9k</span> · main · fast</div>
+      <div class="tile-ft"><span class="lbl">1 win · claude · 7h</span><span class="lamp"><i style="width:6px;height:6px"></i><span class="lbl" style="font-size:10.5px">Needs you</span></span></div>
+    </div>
+    <div class="tile push">
+      <div class="tile-hd"><span class="lbl">gpu-01</span>
+        <span class="lamp"><i></i><span class="lbl">Live</span></span></div>
+      <div class="tile-scr">$ nvidia-smi<br>| 0  H100  81% | 61°C | 412W |<br>train.py · epoch 47/80 · loss 0.0312</div>
+      <div class="tile-ft"><span class="lbl">3 win · python</span><span class="lbl">14h</span></div>
+    </div>
+    <div class="tile">
+      <div class="tile-hd"><span class="lbl">main</span>
+        <span class="lamp"><i></i><span class="lbl">Live</span></span></div>
+      <div class="tile-scr">$ git log --oneline -2<br>9d27f5e keep notes under the cap<br>8ff3b21 bump to 1.2.0</div>
+      <div class="tile-ft"><span class="lbl">2 win · 1 client</span><span class="lbl">7h</span></div>
+    </div>
+  </div>
+
+</body>
+</html>
