@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Multiplex, the SSH tmux terminal for Vision Pro, iPad, and iPhone</title>
-<meta name="description" content="A spatial SSH terminal for remote tmux. Every session is a live monitor on a wall; attaching opens it in its own window. For Apple Vision Pro, iPad, and iPhone.">
+<meta name="description" content="A spatial SSH terminal for remote tmux, or herdr per host. Every session is a live monitor on a wall; attaching opens it in its own window. For Apple Vision Pro, iPad, and iPhone.">
 <meta property="og:title" content="Multiplex, the SSH tmux terminal">
-<meta property="og:description" content="Every tmux session as a live monitor on a wall. Attach opens it in its own window.">
+<meta property="og:description" content="Every tmux or herdr session as a live monitor on a wall. Attach opens it in its own window.">
 <meta property="og:image" content="https://multiplexterm.dev/assets/og.png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -310,7 +310,7 @@
       <div>
         <p class="eyebrow lbl">An SSH terminal for Apple Vision Pro, iPad &amp; iPhone</p>
         <h1>Every session, its own window.</h1>
-        <p>Multiplex is a spatial <strong>SSH terminal for remote tmux</strong>. See every session live on a wall, then attach it anywhere.</p>
+        <p>Multiplex is a spatial <strong>SSH terminal for remote tmux</strong> &mdash; or <strong>herdr</strong>, chosen per host. See every session live on a wall, then attach it anywhere.</p>
         <div class="cta">
           <a class="asb" href="https://apps.apple.com/app/id6790074057">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.031 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
@@ -341,7 +341,7 @@
     <div class="wrap rev">
       <div class="head">
         <h2>A monitor wall for your fleet.</h2>
-        <p class="sub">Hosts probe concurrently over SSH and every tmux session appears as a live tile: its <strong>actual last lines</strong>, one spine segment per window, a red <strong>LIVE</strong> tally while you are attached. On Vision Pro, the wall hangs in your room.</p>
+        <p class="sub">Hosts probe concurrently over SSH and every tmux session appears as a live tile: its <strong>actual last lines</strong>, one spine segment per window, a red <strong>LIVE</strong> tally while you are attached. Switch a host to <strong>herdr</strong> and each session is one tile with its workspaces on the spine, its agent state read from herdr itself. On Vision Pro, the wall hangs in your room.</p>
       </div>
       <img src="assets/visionos-deck.jpg" width="2400" height="1350" alt="The Multiplex deck on Apple Vision Pro: a dark monitor wall of live tmux session tiles floating in a living room" loading="lazy">
     </div>
@@ -369,8 +369,8 @@
         <ul class="feat-list">
           <li><b>One-tap command chips</b>Stop, clear, compact, model and thinking switches follow the foreground agent, even in a plain SSH shell.</li>
           <li><b>Custom commands that travel</b>Per host and per agent, multiline if you like, synced to your other devices with the host.</li>
-          <li><b>Alerts when it needs you<span class="pro">PRO</span></b>A finished turn, a question, a permission prompt: get notified instead of babysitting.</li>
-          <li><b>Prompt history with jump<span class="pro">PRO</span></b>Every prompt from Claude Code's own session file, one tap to jump the transcript back to it.</li>
+          <li><b>Alerts when it needs you<span class="pro">PRO</span></b>A finished turn, a question, a permission prompt: get notified instead of babysitting. On herdr hosts the alert comes from the session's own agent state.</li>
+          <li><b>Prompt history with jump<span class="pro">PRO</span></b>Every prompt from Claude Code's own session file, one tap to jump the transcript back to it, on tmux tabs.</li>
         </ul>
       </div>
       <div class="term" role="img" aria-label="A Multiplex terminal in the light Tally Frost theme running Claude Code, with the agent command strip and a NEEDS YOU flag">
@@ -437,7 +437,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
         </div>
         <div class="cell c-file">
           <h3>Drop a file, get a path</h3>
-          <p>Drag a file onto the terminal, or attach from Files, Photos, or the iPad camera. Multiplex uploads it beside your agent and types the remote path for you.</p>
+          <p>In an SSH-backed tmux tab, drag a file onto the terminal or attach from Files, Photos, or the iPad camera. Multiplex uploads it beside your agent and types the remote path for you.</p>
           <code>~/project/.multiplex-drops/spec.pdf</code>
         </div>
         <div class="cell c-view">
@@ -464,7 +464,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
         </div>
         <div class="cell c-widget">
           <h3>Widgets &amp; Shortcuts</h3>
-          <p>Home Screen widgets show last-known session frames with an honest SEEN stamp. Siri and Shortcuts open a shell or launch an agent in a chosen working directory, optionally running a host-configured setup script before an optional first prompt.</p>
+          <p>Home Screen widgets show last-known session frames with an honest SEEN stamp. Siri and Shortcuts open a shell on any host; on tmux hosts they can also launch an agent in a chosen working directory, with an optional setup script and first prompt.</p>
         </div>
         <div class="cell c-priv">
           <h3>Private by design</h3>
@@ -485,7 +485,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
           <div class="plan-head"><span class="lbl">Free</span><span class="price"><b>$0</b></span></div>
           <p class="plan-sub">The full spatial experience, two hosts.</p>
           <ul>
-            <li>Live wall, spatial windows, tabs, merge and split</li>
+            <li>Live wall with tmux or herdr per host, spatial windows, tabs, merge and split</li>
             <li>Bind hosts with a QR from the machine&rsquo;s own terminal</li>
             <li>Agent detection everywhere, ten command-chip taps a day</li>
             <li>Inline browser and file-viewer tabs, file drops</li>
@@ -509,7 +509,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
           </a>
         </div>
       </div>
-      <p class="fine">Multiplex is a free download; Multiplex Pro is a one-time US&nbsp;$19.99 in-app purchase (pricing varies by storefront). You need a host you can reach over SSH, with a password, an OpenSSH ed25519 or RSA key, or a key enrolled by <code>mpx&nbsp;bind</code>. The live wall and persistent sessions need <code>tmux&nbsp;1.8+</code> on the host; plain SSH shells work without tmux; mosh needs <code>mosh-server</code>. Requires visionOS&nbsp;1.0 or iOS&nbsp;17.</p>
+      <p class="fine">Multiplex is a free download; Multiplex Pro is a one-time US&nbsp;$19.99 in-app purchase (pricing varies by storefront). You need a host you can reach over SSH, with a password, an OpenSSH ed25519 or RSA key, or a key enrolled by <code>mpx&nbsp;bind</code>. The live wall and persistent sessions need <code>tmux&nbsp;1.8+</code> or <code>herdr&nbsp;0.7.5+</code> on the host; plain SSH shells work without either; mosh needs <code>mosh-server</code>. Requires visionOS&nbsp;1.0 or iOS&nbsp;17.</p>
     </div>
   </section>
 
