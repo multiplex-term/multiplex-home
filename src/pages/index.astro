@@ -232,6 +232,7 @@
     font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;
     color:#9BA1A6;border:1px solid rgba(255,255,255,.28);padding:2px 7px;white-space:nowrap;
   }
+  .iap.soon{color:#F2F3F4;border-color:rgba(255,255,255,.55)}
   .price{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ink3)}
   .price b{font-weight:500;font-size:20px;color:var(--ink)}
   .plan.pro .price{color:#9BA1A6}
@@ -494,8 +495,8 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
           </ul>
         </div>
         <div class="plan pro">
-          <div class="plan-head"><span class="lbl">Multiplex Pro</span><span class="iap">In-app purchase</span><span class="price"><b>$19.99</b> once</span></div>
-          <p class="plan-sub">Everything in Free, unlocked with one purchase. No subscription.</p>
+          <div class="plan-head"><span class="lbl">Multiplex Pro</span><span class="iap">In-app purchase</span><span class="iap soon">Coming soon</span><span class="price"><b>$19.99</b> once</span></div>
+          <p class="plan-sub">Everything in Free, unlocked with one purchase. No subscription. Not on sale yet &mdash; the purchase opens once App Review clears it.</p>
           <ul>
             <li>Unlimited hosts</li>
             <li>mosh: sessions survive sleep, roaming, IP changes</li>
@@ -509,7 +510,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
           </a>
         </div>
       </div>
-      <p class="fine">Multiplex is a free download; Multiplex Pro is a one-time US&nbsp;$19.99 in-app purchase (pricing varies by storefront). You need a host you can reach over SSH, with a password, an OpenSSH ed25519 or RSA key, or a key enrolled by <code>mpx&nbsp;bind</code>. The live wall and persistent sessions need <code>tmux&nbsp;1.8+</code> on the host; plain SSH shells work without tmux; mosh needs <code>mosh-server</code>. Requires visionOS&nbsp;1.0 or iOS&nbsp;17.</p>
+      <p class="fine">Multiplex is a free download; Multiplex Pro will be a one-time US&nbsp;$19.99 in-app purchase (pricing varies by storefront) &mdash; it is still in App Review, so the features marked <span class="mono">PRO</span> are not unlockable yet. You need a host you can reach over SSH, with a password, an OpenSSH ed25519 or RSA key, or a key enrolled by <code>mpx&nbsp;bind</code>. The live wall and persistent sessions need <code>tmux&nbsp;1.8+</code> on the host; plain SSH shells work without tmux; mosh needs <code>mosh-server</code>. Requires visionOS&nbsp;1.0 or iOS&nbsp;17.</p>
     </div>
   </section>
 
