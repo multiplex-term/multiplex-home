@@ -102,26 +102,26 @@
 
   /* The device lineup: Vision Pro, iPad, iPhone on one baseline at true
      relative physical scale. Widths as % of the cluster derive from real
-     hardware widths: Vision Pro ~203 mm -> 51.2%, iPad Pro 11" 177.5 mm
-     -> 44.8%, iPhone 71.9 mm -> 18.1%. Screenshots are real captures;
-     the frames add each device's actual bezel share. */
+     hardware widths: Vision Pro ~203 mm -> 44.3%, iPad Pro 11" landscape
+     247.6 mm -> 54.1%, iPhone 71.9 mm -> 15.7%. Screenshots are real
+     captures; the frames add each device's actual bezel share. */
   .devices{
     /* bleed into the page's outer margin, never past the viewport edge */
     --bleed:clamp(24px, calc((100vw - var(--w))/2 + 24px), 140px);
     position:relative;width:min(680px,calc(100% + var(--bleed)));
-    aspect-ratio:250/166;
+    aspect-ratio:250/102;
     margin:0 calc(-1*var(--bleed)) -76px auto;align-self:end;
   }
   .devices>*{position:absolute;bottom:0}
-  .dev-vp{width:51.2%;left:0;z-index:1}
+  .dev-vp{width:44.3%;left:0;z-index:1}
   .dev-pad{
-      width:44.8%;left:45.8%;aspect-ratio:1775/2497;z-index:2;
-    background:#0c0d0e;border-radius:18px;padding:2.2%;
+    width:54.1%;left:39.6%;aspect-ratio:4/3;z-index:2;
+    background:#0c0d0e;border-radius:16px;padding:1.8%;
     box-shadow:var(--shadow),0 0 0 1px rgba(25,30,37,.35);
   }
   .dev-pad img{width:100%;height:100%;object-fit:cover;border-radius:8px}
   .dev-phone{
-    width:18.1%;left:81.9%;aspect-ratio:719/1500;z-index:3;
+    width:15.7%;left:84.3%;aspect-ratio:719/1500;z-index:3;
     background:#0c0d0e;border-radius:15px;padding:1.05%;
     box-shadow:var(--shadow),0 0 0 1px rgba(25,30,37,.35);
   }
@@ -286,6 +286,7 @@
     </a>
     <nav class="nav-links" aria-label="Sections">
       <a href="#wall">The wall</a>
+      <a href="#herdr">herdr</a>
       <a href="#agents">Agents</a>
       <a class="keep" href="#pricing">Pricing</a>
     </nav>
@@ -313,7 +314,7 @@
           <img src="assets/visionpro.webp" width="1044" height="694" alt="Apple Vision Pro">
         </div>
         <div class="dev-pad">
-          <img src="assets/ipad-deck.png" width="2064" height="2752" alt="The Multiplex deck on iPad: a grid of live tmux session tiles for host devbox" fetchpriority="high">
+          <img src="assets/ipad-deck-13.png" width="2064" height="1548" alt="The Multiplex deck on iPad in landscape: live session tiles for two hosts, one running herdr" fetchpriority="high">
         </div>
         <div class="dev-phone">
           <img src="assets/iphone-deck.png" width="1260" height="2736" alt="The Multiplex deck on iPhone: a column of live session tiles, one wearing a red LIVE tally">
@@ -327,21 +328,39 @@
     <div class="wrap rev">
       <div class="head">
         <h2>A monitor wall for your fleet.</h2>
-        <p class="sub">Hosts probe concurrently over SSH and every tmux session appears as a live tile: its <strong>actual last lines</strong>, one spine segment per window, a red <strong>LIVE</strong> tally while you are attached. Switch a host to <strong>herdr</strong> and each session is one tile with its workspaces on the spine, its agent state read from herdr itself. On Vision Pro, the wall hangs in your room.</p>
+        <p class="sub">Hosts probe concurrently over SSH and every session appears as a live tile: its <strong>actual last lines</strong>, one spine segment per window, a red <strong>LIVE</strong> tally while you are attached. tmux and herdr hosts share the same wall. On Vision Pro, it hangs in your room.</p>
       </div>
-      <img src="assets/visionos-deck.jpg" width="2400" height="1350" alt="The Multiplex deck on Apple Vision Pro: a dark monitor wall of live tmux session tiles floating in a living room" loading="lazy">
+      <img src="assets/visionos-deck-13.jpg" width="2400" height="1350" alt="The Multiplex deck on Apple Vision Pro: a dark monitor wall of live session tiles for two hosts, one wearing a HERDR badge, floating in a living room" loading="lazy">
     </div>
   </div>
 
+  <!-- ══ SPLIT: HERDR ═══════════════════════════════════════════════════ -->
+  <section id="herdr">
+    <div class="wrap split rtl rev">
+      <div>
+        <h2>Run herdr? First&#8209;class, per host.</h2>
+        <p class="sub">tmux is the default, not a requirement. Each host picks its backend &mdash; <strong>tmux, herdr 0.7.5+, or both at once</strong> &mdash; and herdr sessions get the whole app: a live tile with workspaces on its spine, attach in its own window, merge and split, file drops, agent chips and history.</p>
+        <ul class="feat-list">
+          <li><b>Both backends, one deck</b>Machine runs both? Each refresh quietly notices; the host&rsquo;s rail offers herdr&rsquo;s sessions with the extra checking cost stated, and its tiles join in a lighter chassis.</li>
+          <li><b>New sessions where you say</b>Tick tmux, herdr, or both, and choose which one new sessions run on &mdash; a choice New Session, Shortcuts, the Host widget, and Add Host &#8594; BIND all carry.</li>
+          <li><b>Its own controls</b>An HRDR shortcut panel for splits, tabs, and workspaces, a New Tab in Workspace action, and herdr&rsquo;s own pane menu one long-press away.</li>
+        </ul>
+      </div>
+      <div class="crop" style="aspect-ratio:4/3">
+        <img src="assets/ipad-herdr.png" width="2000" height="1500" alt="A herdr session attached on iPad: the workspace sidebar beside a Claude Code pane, with the agent command strip and the HRDR key in the key rail" loading="lazy">
+      </div>
+    </div>
+  </section>
+
   <!-- ══ SPLIT: HONEST STATE ════════════════════════════════════════════ -->
-  <section>
+  <section style="padding-top:0">
     <div class="wrap split rev">
       <div class="crop">
         <img src="assets/ipad-windows.png" width="2400" height="1800" alt="Three Multiplex windows tiled side by side on iPad: the deck and two live terminal sessions, each its own scene" loading="lazy">
       </div>
       <div>
         <h2>Real multi-window, on iPad and Vision&nbsp;Pro.</h2>
-        <p class="sub">Every attached session is its own window: floating spatial windows you place around the room on Vision Pro, real scenes in Stage Manager and Split View on iPad. Merge windows into tabs and split them back out; the <strong>SSH connection</strong>, buffer, and scrollback move with the tab. Detach, and the wall still shows it running.</p>
+        <p class="sub">Every attached session is its own window: floating spatial windows you place around the room on Vision Pro, real scenes in Stage Manager and Split View on iPad. Merge windows into tabs and split them back out; the <strong>SSH connection</strong>, buffer, and scrollback move with the tab. Detach, and the wall still shows it running. On Vision Pro, an optional <strong>Glass</strong> appearance smokes the chassis so the room shows through.</p>
       </div>
     </div>
   </section>
@@ -355,8 +374,8 @@
         <ul class="feat-list">
           <li><b>One-tap command chips</b>Stop, clear, compact, model and thinking switches follow the foreground agent, even in a plain SSH shell.</li>
           <li><b>Custom commands that travel</b>Per host and per agent, multiline if you like, synced to your other devices with the host.</li>
-          <li><b>Alerts when it needs you<span class="pro">PRO</span></b>A finished turn, a question, a permission prompt: get notified instead of babysitting. On herdr hosts the alert comes from the session's own agent state.</li>
-          <li><b>Prompt history with jump<span class="pro">PRO</span></b>Every prompt from Claude Code's own session file, one tap to jump the transcript back to it, on tmux tabs.</li>
+          <li><b>Alerts when it needs you<span class="pro">PRO</span></b>A finished turn, a question, a permission prompt: get notified instead of babysitting &mdash; and an optional per-host keep-alive keeps watch for a while after you switch away.</li>
+          <li><b>Prompt history with jump<span class="pro">PRO</span></b>Every prompt from Claude Code's own session file, one tap to jump the transcript back to it.</li>
         </ul>
       </div>
       <div class="term" role="img" aria-label="A Multiplex terminal in the light Tally Frost theme running Claude Code, with the agent command strip and a NEEDS YOU flag">
@@ -432,7 +451,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
         </div>
         <div class="cell c-fv">
           <h3>&#9636;&#8202; Files and git diffs, one tab over</h3>
-          <p>Long-press a path in the terminal &mdash; or open a file viewer tab &mdash; to browse the pane&rsquo;s directory over SFTP: code with syntax highlighting, Markdown, images, and git diffs that keep updating while your agent edits. Review the change without leaving the window.</p>
+          <p>Long-press a path in the terminal &mdash; or open a file viewer tab &mdash; to browse the pane&rsquo;s directory over SFTP: code with syntax highlighting, Markdown, images, and git diffs that keep updating while your agent edits. File tabs of their own, &#9666;&#8202;&#9656; browse history, and a reading size you set once. Review the change without leaving the window.</p>
         </div>
         <div class="cell c-termcell">
           <div>
@@ -440,7 +459,8 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
             <ul>
               <li><b>xterm-256color</b>, mouse-aware TUIs</li>
               <li><b>IMEs and hardware keyboards</b></li>
-              <li><b>tmux menu</b> and touch copy mode</li>
+              <li><b>Text selection</b> in any pane, copy mode</li>
+              <li><b>GUIDE</b>, each tab&rsquo;s illustrated manual</li>
               <li><b>Ten themes</b>, custom editor with Pro</li>
             </ul>
           </div>
@@ -450,7 +470,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
         </div>
         <div class="cell c-widget">
           <h3>Widgets &amp; Shortcuts</h3>
-          <p>Home Screen widgets show last-known session frames with an honest SEEN stamp. Siri and Shortcuts open a shell on any host; on tmux hosts they can also launch an agent in a chosen working directory, with an optional setup script and first prompt.</p>
+          <p>Home Screen widgets show last-known session frames with an honest SEEN stamp. Siri and Shortcuts open a shell on any host, or launch an agent in a chosen working directory, with an optional setup script and first prompt.</p>
         </div>
         <div class="cell c-priv">
           <h3>Private by design</h3>
@@ -476,7 +496,7 @@ Bind Jhen&rsquo;s Vision Pro? [Y/n] y
             <li>Agent detection everywhere, ten command-chip taps a day</li>
             <li>Inline browser and file-viewer tabs, file drops</li>
             <li>Widgets, Shortcuts, iCloud Keychain sync</li>
-            <li>Built-in themes, light and dark appearance</li>
+            <li>Built-in themes; light, dark, and Vision&nbsp;Pro Glass appearances</li>
           </ul>
         </div>
         <div class="plan pro">
