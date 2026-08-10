@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Install mpx, the Multiplex companion CLI, on macOS and Linux</title>
+<meta name="description" content="Install mpx on macOS or Linux with Homebrew, the one-line installer, or a manual download — then run mpx bind to add the machine to Multiplex from its own terminal.">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='212' fill='%2317181A'/%3E%3Cg fill='%23F2F3F4'%3E%3Crect x='96' y='654' width='832' height='68'/%3E%3Crect x='262' y='284' width='68' height='438'/%3E%3Crect x='694' y='284' width='68' height='438'/%3E%3C/g%3E%3Cpolyline points='296,304 512,600 728,304' fill='none' stroke='%23F2F3F4' stroke-width='68'/%3E%3Ccircle cx='512' cy='600' r='40' fill='%23E5484D'/%3E%3C/svg%3E">
+<style is:inline>
+  /* TALLY tokens (DESIGN.md, Frost light chassis) */
+  :root{
+    --chassis:#E4E8EE;--bezel:#F0F3F7;--line:#CDD3DC;--screen:#F9FBFD;
+    --ink:#191E25;--ink2:#515C69;--ink3:#87919E;--tally:#C13439;
+    --mini:#3A434E;--ok:#3E7C58;
+    --sans:system-ui,-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--chassis);color:var(--ink);
+    font-family:var(--sans);font-size:17px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:clip;
+  }
+  ::selection{background:rgba(193,52,57,.22)}
+  a{color:inherit}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  .lbl{font-weight:700;font-stretch:condensed;text-transform:uppercase;letter-spacing:.09em}
+
+  header{
+    position:sticky;top:0;z-index:40;
+    background:color-mix(in srgb,var(--chassis) 86%,transparent);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;gap:28px;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand svg{width:26px;height:26px;color:var(--ink)}
+  .brand .lbl{font-size:15px}
+  .nav a.back{margin-left:auto;text-decoration:none;color:var(--ink2);font-size:14px;padding:8px 14px}
+  .nav a.back:hover{color:var(--ink);background:var(--bezel)}
+
+  main{padding:72px 0 96px}
+  h1{
+    font-weight:750;font-stretch:condensed;letter-spacing:-.015em;
+    font-size:clamp(2.4rem,5vw,3.6rem);line-height:1.02;margin-bottom:10px;
+  }
+  .date{font-family:var(--mono);font-size:12.5px;color:var(--ink3);margin-bottom:36px}
+  .tldr{
+    background:var(--screen);border:1px solid var(--line);
+    padding:22px 26px;margin-bottom:52px;font-size:18px;
+  }
+  .tldr strong{font-weight:650}
+  h2{
+    font-weight:750;font-stretch:condensed;letter-spacing:-.005em;
+    font-size:22px;line-height:1.15;margin:44px 0 12px;
+  }
+  h2 .os{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);font-weight:400;margin-left:8px;vertical-align:2px;text-transform:uppercase;white-space:nowrap}
+  p{color:var(--ink2);margin-bottom:14px;max-width:68ch}
+  p strong,li strong{color:var(--ink);font-weight:600}
+  ul{margin:0 0 14px 0;padding-left:0;list-style:none;display:grid;gap:8px}
+  li{color:var(--ink2);padding-left:16px;position:relative;max-width:68ch}
+  li::before{content:"";position:absolute;left:0;top:.66em;width:7px;height:2px;background:var(--ink3)}
+  code{font-family:var(--mono);font-size:14px}
+
+  /* one-command blocks: the terminal is the artifact, frame it like one */
+  pre{
+    background:var(--screen);border:1px solid var(--line);
+    font-family:var(--mono);font-size:13.5px;line-height:1.7;color:var(--mini);
+    padding:14px 18px;margin:6px 0 18px;overflow-x:auto;
+  }
+  pre .dim{color:var(--ink3)}
+  pre .ok{color:var(--ok)}
+
+  table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:15px}
+  th{
+    text-align:left;font-weight:700;font-stretch:condensed;text-transform:uppercase;
+    letter-spacing:.09em;font-size:11px;color:var(--ink3);
+    padding:0 16px 8px 0;border-bottom:1px solid var(--line);
+  }
+  td{color:var(--ink2);padding:10px 16px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+  td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+  td code{font-size:13px}
+
+  footer{border-top:1px solid var(--line);padding:40px 0 56px;color:var(--ink3);font-size:13.5px}
+  .foot{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+  .foot a{color:var(--ink2);text-decoration:none}
+  .foot a:hover{color:var(--ink)}
+  .foot .spacer{flex:1}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="../" aria-label="Multiplex home">
+      <svg viewBox="0 0 1024 1024" aria-hidden="true">
+        <g fill="currentColor">
+          <rect x="0" y="654" width="1024" height="68"/>
+          <rect x="262" y="284" width="68" height="438"/>
+          <rect x="694" y="284" width="68" height="438"/>
+        </g>
+        <polyline points="296,304 512,600 728,304" fill="none" stroke="currentColor" stroke-width="68" stroke-linecap="butt" stroke-linejoin="miter"/>
+        <circle cx="512" cy="600" r="40" fill="#C13439"/>
+      </svg>
+      <span class="lbl">Multiplex</span>
+    </a>
+    <a class="back" href="../">Home</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>Install mpx</h1>
+    <p class="date">MACOS &middot; LINUX &middot; ARM64 &amp; X86_64</p>
+
+    <div class="tldr">
+      <strong><code>mpx</code> is the companion CLI for Multiplex.</strong> You run it on the machine you want to add — <code>mpx bind</code> offers the machine to the app with a QR code in the terminal and an announcement on the local network, and enrolls a public key when you confirm. Prebuilt for macOS and Linux; nothing to install on your Apple&nbsp;devices.
+    </div>
+
+    <h2>Homebrew <span class="os">macOS &middot; Linux</span></h2>
+    <pre>brew install multiplex-term/tap/mpx</pre>
+    <p>Installs <code>mpx</code> and the spelled-out <code>multiplex</code> alias from the <a href="https://github.com/multiplex-term/homebrew-tap">multiplex-term/tap</a> tap. Later, <code>brew upgrade mpx</code> updates it and <code>brew uninstall mpx</code> removes it.</p>
+
+    <h2>One-line installer <span class="os">macOS &middot; Linux</span></h2>
+    <pre>curl -fsSL https://multiplexterm.dev/install-mpx-cli | sh</pre>
+    <p>For machines without Homebrew — a server is exactly where you usually run <code>mpx bind</code>. The script is plain POSIX <code>sh</code> (dash and busybox included), needs only <code>curl</code> and <code>tar</code>, and:</p>
+    <ul>
+      <li><strong>Verifies before installing.</strong> Every download is checked against the release&rsquo;s published <code>SHA256SUMS</code>; a mismatch refuses to install.</li>
+      <li><strong>Never asks for root.</strong> It installs into the first writable directory already on your <code>PATH</code> (<code>~/.local/bin</code>, <code>/usr/local/bin</code>, or <code>~/bin</code>) and tells you if none qualifies — no <code>sudo</code>, ever.</li>
+      <li><strong>Installs both names</strong>: <code>mpx</code> and the <code>multiplex</code> alias.</li>
+    </ul>
+    <p>Adjust it with environment variables:</p>
+    <table>
+      <thead><tr><th>Variable</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td><code>MPX_VERSION=v0.1.1</code></td><td>Install a specific tag instead of the latest release.</td></tr>
+        <tr><td><code>MPX_INSTALL_DIR=~/bin</code></td><td>Install here instead of the default search.</td></tr>
+        <tr><td><code>MPX_NO_ALIAS=1</code></td><td>Install only <code>mpx</code>, skip the <code>multiplex</code> alias.</td></tr>
+      </tbody>
+    </table>
+    <pre>curl -fsSL https://multiplexterm.dev/install-mpx-cli | MPX_INSTALL_DIR=~/bin sh</pre>
+    <p>Prefer to read what you run? The installer lives at <a href="../install-mpx-cli"><code>multiplexterm.dev/install-mpx-cli</code></a> — open it first, then pipe it.</p>
+
+    <h2>Manual download</h2>
+    <p>Every release on <a href="https://github.com/multiplex-term/multiplex-cli-releases/releases">multiplex-term/multiplex-cli-releases</a> ships four archives. Linux builds are statically linked against musl, so one binary covers glibc distributions and Alpine alike.</p>
+    <table>
+      <thead><tr><th>Platform</th><th>Archive</th></tr></thead>
+      <tbody>
+        <tr><td>macOS, Apple silicon</td><td><code>mpx-&lt;tag&gt;-aarch64-apple-darwin.tar.gz</code></td></tr>
+        <tr><td>macOS, Intel</td><td><code>mpx-&lt;tag&gt;-x86_64-apple-darwin.tar.gz</code></td></tr>
+        <tr><td>Linux, arm64</td><td><code>mpx-&lt;tag&gt;-aarch64-unknown-linux-musl.tar.gz</code></td></tr>
+        <tr><td>Linux, x86_64</td><td><code>mpx-&lt;tag&gt;-x86_64-unknown-linux-musl.tar.gz</code></td></tr>
+      </tbody>
+    </table>
+    <p>Verify against the same release&rsquo;s <code>SHA256SUMS</code>, then put <code>mpx</code> somewhere on your <code>PATH</code>:</p>
+    <pre>shasum -a 256 -c SHA256SUMS --ignore-missing   <span class="dim"># sha256sum on Linux</span>
+tar -xzf mpx-&lt;tag&gt;-&lt;target&gt;.tar.gz
+install -m 755 mpx-&lt;tag&gt;-&lt;target&gt;/mpx ~/.local/bin/</pre>
+
+    <h2>Then bind the machine</h2>
+    <p>On the machine you just installed to:</p>
+    <pre>mpx bind</pre>
+    <p>It prints a QR code right in the terminal and announces itself on the local network. Scan it with Multiplex, or approve it from <strong>Add Host &#9656; BIND</strong> and type the PIN; the machine confirms on its own screen and lands on the wall. Add <code>--copy</code> to put the offer on the clipboard instead, or <code>--addr</code> to name the address the app should reach when the machine sits behind NAT.</p>
+    <p>Everything is reversible by name: the enrolled key is labeled in <code>authorized_keys</code>, so <code>mpx unbind</code> removes exactly what bind added — nothing else.</p>
+
+    <h2>Problems?</h2>
+    <p><a href="https://github.com/multiplex-term/multiplex-cli-releases/issues">Open an issue</a> on the releases repository, and include <code>mpx --version</code> and your platform.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>&copy; 2026 Multiplex</span>
+    <span class="spacer"></span>
+    <a href="../">Home</a>
+    <a href="https://apps.apple.com/app/id6790074057">App Store</a>
+  </div>
+</footer>
+
+</body>
+</html>
