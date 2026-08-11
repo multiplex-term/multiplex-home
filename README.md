@@ -2,9 +2,9 @@
 
 The Multiplex landing site: the App Store listing's marketing URL and privacy
 policy for [Multiplex](https://github.com/multiplex-term/Multiplex), the SSH
-tmux terminal for Apple Vision Pro, iPad, and iPhone. Astro on Cloudflare
-Workers (static output; the Cloudflare template this grew from is the
-astro-blog-starter).
+terminal for remote tmux — or herdr — on Apple Vision Pro, iPad, and
+iPhone. Astro on Cloudflare Workers (static output; the Cloudflare template
+this grew from is the astro-blog-starter).
 
 ## Pages
 
