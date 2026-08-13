@@ -4,7 +4,7 @@
 #   curl -fsSL https://multiplexterm.dev/install-mpx-cli | sh
 #
 # Covers macOS and Linux, arm64 and x86_64. Downloads a prebuilt archive from
-# github.com/multiplex-term/multiplex-cli-releases, verifies its SHA-256
+# github.com/multiplex-term/mpx-cli, verifies its SHA-256
 # against that release's SHA256SUMS, and installs `mpx` plus the spelled-out
 # `multiplex` alias.
 #
@@ -18,7 +18,7 @@
 #   MPX_NO_ALIAS=1       install only `mpx`, skip the `multiplex` alias
 set -eu
 
-REPO="multiplex-term/multiplex-cli-releases"
+REPO="multiplex-term/mpx-cli"
 BASE="https://github.com/$REPO/releases"
 
 say() { printf '%s\n' "$*"; }
