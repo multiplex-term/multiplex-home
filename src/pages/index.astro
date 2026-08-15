@@ -142,6 +142,10 @@
     position:relative;width:min(680px,calc(100% + var(--bleed)));
     aspect-ratio:250/104;
     margin:0 calc(-1*var(--bleed)) -76px auto;align-self:end;
+    /* Frame corner radii are cqw so they shrink with the cluster: fixed px
+       radii on the 680px layout turn into blobs once the phone is ~58px
+       wide, and the bezel bulges at the corners. 1cqw = 1% of the cluster. */
+    container-type:inline-size;
   }
   /* Frames take their height from the screenshot itself (the captures are
      already frame-shaped) — no aspect-ratio/object-fit cropping, which
@@ -150,19 +154,19 @@
   .dev-vp{width:44.3%;left:0;z-index:1}
   .dev-pad{
     width:54.1%;left:39.6%;z-index:2;
-    background:#0c0d0e;border-radius:16px;padding:1.8%;
+    background:#0c0d0e;border-radius:2.35cqw;padding:1.8%;
     box-shadow:var(--shadow),0 0 0 1px rgba(25,30,37,.35);
   }
-  .dev-pad img{width:100%;border-radius:8px}
+  .dev-pad img{width:100%;border-radius:1.18cqw}
   /* iPhone 17 Pro-class shell: ultra-thin uniform bezel (~3.6% of device
      width) and near-concentric screen corners. The 0.57% padding is solved
      so the 1260x2736 capture lands the frame on the 719:1500 outline. */
   .dev-phone{
     width:15.7%;left:84.3%;z-index:3;
-    background:#0c0d0e;border-radius:17px;padding:0.57%;
+    background:#0c0d0e;border-radius:2.5cqw;padding:0.57%;
     box-shadow:var(--shadow),0 0 0 1px rgba(25,30,37,.35);
   }
-  .dev-phone img{width:100%;border-radius:13px}
+  .dev-phone img{width:100%;border-radius:1.91cqw}
   @media (prefers-reduced-motion:no-preference){
     .devices>*{animation:rise .9s cubic-bezier(.16,1,.3,1) both}
     .dev-vp{animation-delay:.1s}
